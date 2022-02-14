@@ -19,4 +19,12 @@ public class Income {
 
     @Column
     private BigDecimal income;
+
+    public BigDecimal getIncome() {
+        return income;
+    }
+
+    public void setIncome(BigDecimal income) {
+        this.income = income;
+    }
 }

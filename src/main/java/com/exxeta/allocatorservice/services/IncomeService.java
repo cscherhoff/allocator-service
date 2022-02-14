@@ -15,11 +15,13 @@ public class IncomeService {
         this.incomeRepository = incomeRepository;
     }
 
-    public Income getIncome() {
-        return incomeRepository.findAll().get(0);
+    public BigDecimal getIncome() {
+        return incomeRepository.findAll().get(0).getIncome();
     }
 
     public void updateIncome(BigDecimal income) {
-        incomeRepository.save(new Income(income));
+        Income incomeFromDb = incomeRepository.findAll().get(0);
+        incomeFromDb.setIncome(income);
+        incomeRepository.save(incomeFromDb);
     }
 }
