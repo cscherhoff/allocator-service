@@ -15,4 +15,15 @@ public class Allocation {
 
     @Column
     private BigDecimal amount;
+
+    public Allocation() {
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
 }
