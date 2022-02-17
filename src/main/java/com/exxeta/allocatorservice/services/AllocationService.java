@@ -15,11 +15,13 @@ public class AllocationService {
         this.allocationRepository = allocationRepository;
     }
 
-    public List<Allocation> getAllocations() {
-        return allocationRepository.findAll();
+    public List<Allocation> getAllocations(long userId) {
+        return allocationRepository.findAllByUserId(userId);
     }
 
-    public void updateAllocations(List<Allocation> allocations) {
+    public void updateAllocations(long userId, List<Allocation> allocations) {
+        allocations.forEach(allocation -> allocation.setUserId(userId));
+        allocationRepository.deleteAll();
         allocationRepository.saveAll(allocations);
     }
 }
