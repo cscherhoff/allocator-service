@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AllocationRepository extends JpaRepository<Allocation, Long> {
     List<Allocation> findAllByUserId(long userId);
+    Optional<Allocation> findByDestination(String destination);
 }

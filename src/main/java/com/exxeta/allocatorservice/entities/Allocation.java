@@ -12,7 +12,7 @@ public class Allocation {
 
     private long userId;
 
-    @Column
+    @Column(unique = true)
     private String destination;
 
     @Column
