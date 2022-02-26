@@ -12,32 +12,23 @@ public class Allocation {
 
     private long userId;
 
-    @Column(unique = true)
-    private String destination;
+    private BigDecimal investment;
 
-    @Column
-    private BigDecimal amount;
+    private BigDecimal fixCosts;
+
+    private BigDecimal categories;
 
     public Allocation() {
+        investment = BigDecimal.ZERO;
+        fixCosts = BigDecimal.ZERO;
+        categories = BigDecimal.ZERO;
     }
 
-    public Allocation(long userId, String destination, BigDecimal amount) {
+    public Allocation(long userId) {
+        this();
         this.userId = userId;
-        this.destination = destination;
-        this.amount = amount;
     }
 
-    public String getDestination() {
-        return destination;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
 
     public long getUserId() {
         return userId;
@@ -45,5 +36,17 @@ public class Allocation {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public BigDecimal getInvestment() {
+        return investment;
+    }
+
+    public BigDecimal getFixCosts() {
+        return fixCosts;
+    }
+
+    public BigDecimal getCategories() {
+        return categories;
     }
 }
