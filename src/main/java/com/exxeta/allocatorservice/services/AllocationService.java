@@ -22,15 +22,14 @@ public class AllocationService {
         return allocationRepository.findByUserId(userId).orElseGet(() -> new Allocation(userId));
     }
 
-    public void updateAllocation(long userId, Allocation allocation) throws InvalidAllocationException {
-        allocationValidation(userId, allocation);
-        allocation.setUserId(userId);
+    public void updateAllocation(Allocation allocation) throws InvalidAllocationException {
+        allocationValidation(allocation);
         allocationRepository.deleteAll();
         allocationRepository.save(allocation);
     }
 
-    private void allocationValidation(long userId, Allocation allocation) throws InvalidAllocationException {
-        BigDecimal income = incomeService.getIncome(userId);
+    private void allocationValidation(Allocation allocation) throws InvalidAllocationException {
+        BigDecimal income = incomeService.getIncome(allocation.getUserId());
         final BigDecimal investment = allocation.getInvestment();
         final BigDecimal fixCosts = allocation.getFixCosts();
         final BigDecimal categories = allocation.getCategories();
