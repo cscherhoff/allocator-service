@@ -19,7 +19,7 @@ public class AllocationService {
     }
 
     public Allocation getAllocation(long userId) {
-        return allocationRepository.findById(userId).orElseGet(() -> new Allocation(userId));
+        return allocationRepository.findByUserId(userId).orElseGet(() -> new Allocation(userId));
     }
 
     public void updateAllocation(long userId, Allocation allocation) throws InvalidAllocationException {

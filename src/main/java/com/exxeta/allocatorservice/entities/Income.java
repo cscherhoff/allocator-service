@@ -15,7 +15,8 @@ public class Income {
     public Income() {
     }
 
-    public Income(BigDecimal income) {
+    public Income(long userId, BigDecimal income) {
+        this.userId = userId;
         this.income = income;
     }
 
