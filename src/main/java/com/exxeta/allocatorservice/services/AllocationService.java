@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AllocationService {
@@ -23,10 +24,13 @@ public class AllocationService {
     }
 
     public void updateAllocation(long userId, Allocation allocation) throws InvalidAllocationException {
-        allocationValidation(allocation);
         allocation.setUserId(userId);
-        allocationRepository.deleteAll();
-        allocationRepository.save(allocation);
+        allocationValidation(allocation);
+        final Optional<Allocation> allocationFromDatabase = allocationRepository.findByUserId(userId);
+        if (allocationFromDatabase.isPresent()) {
+            allocationRepository.deleteAll();
+        }
+        allocationRepository.save(new Allocation(userId, allocation.getInvestment(), allocation.getFixCosts(), allocation.getCategories()));
     }
 
     private void allocationValidation(Allocation allocation) throws InvalidAllocationException {
