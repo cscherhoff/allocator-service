@@ -22,8 +22,9 @@ public class AllocationService {
         return allocationRepository.findByUserId(userId).orElseGet(() -> new Allocation(userId));
     }
 
-    public void updateAllocation(Allocation allocation) throws InvalidAllocationException {
+    public void updateAllocation(long userId, Allocation allocation) throws InvalidAllocationException {
         allocationValidation(allocation);
+        allocation.setUserId(userId);
         allocationRepository.deleteAll();
         allocationRepository.save(allocation);
     }
