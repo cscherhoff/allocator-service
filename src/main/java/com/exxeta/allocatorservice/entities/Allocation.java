@@ -1,28 +1,29 @@
 package com.exxeta.allocatorservice.entities;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.*;
 
 @Entity
 public class Allocation {
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private long id;
 
     @Id
     private long userId;
 
     private BigDecimal investment;
 
-    private BigDecimal fixCosts;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<FixCost> fixCosts = new ArrayList<>();
 
-    private BigDecimal categories;
+    @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
+    private List<Category> categories = new ArrayList<>();
 
     public Allocation() {
         investment = BigDecimal.ZERO;
-        fixCosts = BigDecimal.ZERO;
-        categories = BigDecimal.ZERO;
     }
 
     public Allocation(long userId) {
@@ -30,12 +31,17 @@ public class Allocation {
         this.userId = userId;
     }
 
-    public Allocation(long userId, BigDecimal investment, BigDecimal fixCosts, BigDecimal categories) {
+    public Allocation(long userId, BigDecimal investment) {
         this.userId = userId;
         this.investment = investment;
-        this.fixCosts = fixCosts;
-        this.categories = categories;
     }
+
+//    public Allocation(long userId, BigDecimal investment, List<FixCost> fixCosts, BigDecimal categories) {
+//        this.userId = userId;
+//        this.investment = investment;
+//        this.fixCosts = fixCosts;
+//        this.categories = categories;
+//    }
 
     public long getUserId() {
         return userId;
@@ -49,11 +55,12 @@ public class Allocation {
         return investment;
     }
 
-    public BigDecimal getFixCosts() {
+    public List<FixCost> getFixCosts() {
         return fixCosts;
     }
 
-    public BigDecimal getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
+
 }
