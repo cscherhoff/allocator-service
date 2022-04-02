@@ -30,9 +30,57 @@ public class AllocationService {
         return allocationRepository.findByUserId(userId).orElseGet(() -> new Allocation(userId));
     }
 
+    public void validateAllocation(Allocation allocation) throws InvalidAllocationException {
+        BigDecimal income = incomeService.getIncome(allocation.getUserId());
+
+        final BigDecimal investment = allocation.getInvestment();
+        if (investment.doubleValue() < 0.00) {
+            throw new InvalidAllocationException("The value for investment must be at least zero, but is" + investment.doubleValue());
+        }
+
+        BigDecimal sumOfFixCosts = BigDecimal.ZERO;
+        for (FixCost fixCost: allocation.getFixCosts()) {
+            if (fixCost.getAmount().doubleValue()<=0.00) {
+                throw new InvalidAllocationException("The value of the fix cost '" + fixCost.getFixCostName() +
+                        "' must be over zero, but is " + fixCost.getAmount());
+            }
+            sumOfFixCosts = sumOfFixCosts.add(fixCost.getAmount());
+        }
+
+        BigDecimal sumOfCategories = BigDecimal.ZERO;
+        for (Category category: allocation.getCategories()) {
+            if (category.getBudget().doubleValue()<=0.00) {
+                throw new InvalidAllocationException("The value of the category '" + category.getCategoryName() +
+                        "' must be over zero, but is " + category.getBudget());
+            }
+            sumOfCategories = sumOfCategories.add(category.getBudget());
+        }
+
+        final BigDecimal totalValueOfAllocation = investment.add(sumOfFixCosts).add(sumOfCategories);
+        if (totalValueOfAllocation.doubleValue() != income.doubleValue()) {
+            throw new InvalidAllocationException("The sum of the values for investments, fix costs and categories must equal the income." +
+                    "The value of the sum is " + totalValueOfAllocation + ", but the income is " + income);
+        }
+    }
+
+    public List<Category> getUpdatedCategories(Allocation allocation) {
+        List<Category> updatedCategories = new ArrayList<>();
+        for (Category category: allocation.getCategories()) {
+            final Optional<Category> categoryFromDbOptional = categoryRepository.findByCategoryName(category.getCategoryName());
+            if (categoryFromDbOptional.isEmpty()) {
+                updatedCategories.add(category);
+            } else {
+                final Category categoryFromDb = categoryFromDbOptional.get();
+                if (categoryFromDb.getBudget().doubleValue() != category.getBudget().doubleValue()) {
+                    updatedCategories.add(category);
+                }
+            }
+        }
+        return updatedCategories;
+    }
+
     public void updateAllocation(long userId, Allocation allocation) throws InvalidAllocationException {
         allocation.setUserId(userId);
-        allocationValidation(allocation);
 
         updateFixCosts(allocation);
         updateCategories(allocation);
@@ -90,38 +138,5 @@ public class AllocationService {
         }
         allocation.getFixCosts().removeAll(fixCostsToDelete);
         allocation.getFixCosts().addAll(fixCostsFromDatabase);
-    }
-
-    private void allocationValidation(Allocation allocation) throws InvalidAllocationException {
-        BigDecimal income = incomeService.getIncome(allocation.getUserId());
-
-        final BigDecimal investment = allocation.getInvestment();
-        if (investment.doubleValue() < 0.00) {
-            throw new InvalidAllocationException("The value for investment must be at least zero, but is" + investment.doubleValue());
-        }
-
-        BigDecimal sumOfFixCosts = BigDecimal.ZERO;
-        for (FixCost fixCost: allocation.getFixCosts()) {
-            if (fixCost.getAmount().doubleValue()<=0.00) {
-                throw new InvalidAllocationException("The value of the fix cost '" + fixCost.getFixCostName() +
-                        "' must be over zero, but is " + fixCost.getAmount());
-            }
-            sumOfFixCosts = sumOfFixCosts.add(fixCost.getAmount());
-        }
-
-        BigDecimal sumOfCategories = BigDecimal.ZERO;
-        for (Category category: allocation.getCategories()) {
-            if (category.getBudget().doubleValue()<=0.00) {
-                throw new InvalidAllocationException("The value of the category '" + category.getCategoryName() +
-                        "' must be over zero, but is " + category.getBudget());
-            }
-            sumOfCategories = sumOfCategories.add(category.getBudget());
-        }
-
-        final BigDecimal totalValueOfAllocation = investment.add(sumOfFixCosts).add(sumOfCategories);
-        if (totalValueOfAllocation.doubleValue() != income.doubleValue()) {
-            throw new InvalidAllocationException("The sum of the values for investments, fix costs and categories must equal the income." +
-                    "The value of the sum is " + totalValueOfAllocation + ", but the income is " + income);
-        }
     }
 }
