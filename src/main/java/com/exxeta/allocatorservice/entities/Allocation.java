@@ -11,7 +11,8 @@ import java.util.*;
 public class Allocation {
 
     @Id
-    private long userId;
+    @Column(length = 100)
+    private String userId;
 
     private BigDecimal investment;
 
@@ -26,28 +27,28 @@ public class Allocation {
         investment = BigDecimal.ZERO;
     }
 
-    public Allocation(long userId) {
+    public Allocation(String userId) {
         this();
         this.userId = userId;
     }
 
-    public Allocation(long userId, BigDecimal investment) {
+    public Allocation(String userId, BigDecimal investment) {
         this.userId = userId;
         this.investment = investment;
     }
 
-//    public Allocation(long userId, BigDecimal investment, List<FixCost> fixCosts, BigDecimal categories) {
+//    public Allocation(String userid, BigDecimal investment, List<FixCost> fixCosts, BigDecimal categories) {
 //        this.userId = userId;
 //        this.investment = investment;
 //        this.fixCosts = fixCosts;
 //        this.categories = categories;
 //    }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

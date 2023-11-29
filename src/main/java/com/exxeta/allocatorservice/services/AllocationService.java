@@ -26,7 +26,7 @@ public class AllocationService {
         this.incomeService = incomeService;
     }
 
-    public Allocation getAllocation(long userId) {
+    public Allocation getAllocation(String userId) {
         return allocationRepository.findByUserId(userId).orElseGet(() -> new Allocation(userId));
     }
 
@@ -79,7 +79,7 @@ public class AllocationService {
         return updatedCategories;
     }
 
-    public void updateAllocation(long userId, Allocation allocation) throws InvalidAllocationException {
+    public void updateAllocation(String userId, Allocation allocation) throws InvalidAllocationException {
         allocation.setUserId(userId);
 
         updateFixCosts(allocation);

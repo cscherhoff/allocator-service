@@ -10,12 +10,12 @@ public class Income {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private long userId;
+    private String userId;
 
     public Income() {
     }
 
-    public Income(long userId, BigDecimal income) {
+    public Income(String userId, BigDecimal income) {
         this.userId = userId;
         this.income = income;
     }
@@ -31,11 +31,11 @@ public class Income {
         this.income = income;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 }

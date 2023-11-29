@@ -16,13 +16,13 @@ public class IncomeService {
         this.incomeRepository = incomeRepository;
     }
 
-    public BigDecimal getIncome(long userId) {
+    public BigDecimal getIncome(String userId) {
         final Optional<Income> incomeFromDb = incomeRepository.findByUserId(userId);
         final Income income = incomeFromDb.orElse(new Income(userId, BigDecimal.ZERO));
         return income.getIncome();
     }
 
-    public void updateIncome(long userId, BigDecimal incomeValue) {
+    public void updateIncome(String userId, BigDecimal incomeValue) {
         final Optional<Income> incomeFromDb = incomeRepository.findByUserId(userId);
         final Income income = incomeFromDb.orElse(new Income(userId, incomeValue));
         income.setIncome(incomeValue);
