@@ -1,5 +1,6 @@
 package com.exxeta.allocatorservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -12,6 +13,7 @@ public class Allocation {
 
     @Id
     @Column(length = 100)
+    @JsonIgnore
     private String userId;
 
     private BigDecimal investment;
