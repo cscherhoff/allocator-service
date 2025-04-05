@@ -8,7 +8,8 @@ public class FixCost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long fixCostId;
+    @Column(name = "id")
+    private long id;
 
     private String fixCostName;
 
@@ -20,6 +21,10 @@ public class FixCost {
     public FixCost(String fixCostName, BigDecimal amount) {
         this.fixCostName = fixCostName;
         this.amount = amount;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getFixCostName() {

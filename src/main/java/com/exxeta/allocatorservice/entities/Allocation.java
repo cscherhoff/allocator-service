@@ -18,11 +18,22 @@ public class Allocation {
 
     private BigDecimal investment;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    @JoinTable(
+            name = "allocation_fixcosts",
+            joinColumns = @JoinColumn(name = "allocation_id", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "fixcost_id", referencedColumnName = "id")
+    )
     private List<FixCost> fixCosts = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SELECT)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    @JoinTable(
+            name = "allocation_categories",
+            joinColumns = @JoinColumn(name = "allocation_id", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id")
+    )
     private List<Category> categories = new ArrayList<>();
 
     public Allocation() {
@@ -38,13 +49,6 @@ public class Allocation {
         this.userId = userId;
         this.investment = investment;
     }
-
-//    public Allocation(String userid, BigDecimal investment, List<FixCost> fixCosts, BigDecimal categories) {
-//        this.userId = userId;
-//        this.investment = investment;
-//        this.fixCosts = fixCosts;
-//        this.categories = categories;
-//    }
 
     public String getUserId() {
         return userId;

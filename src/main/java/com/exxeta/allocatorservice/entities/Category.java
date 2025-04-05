@@ -9,13 +9,19 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long CategoryId;
+    @Column(name = "id")
+    private long id;
 
     private String categoryName;
 
     private BigDecimal budget;
 
     public Category() {
+
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getCategoryName() {
